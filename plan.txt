@@ -1,0 +1,17 @@
+Enter Summoner Name
+Look up summoner id by name (API call)
+
+Look up recent games (last 10) by id (API call)
+Take championID, goldEarned, timePlayed (seconds)
+GoldEarned / timePlayed * 60 = GPM
+
+Look up champion by ID
+Take name, category
+
+Average GPMs by category and overall.
+Update global average with requested GPM.
+Score GPM by comparing to global average.
+Save to database with date, average GPM
+
+Display score, average GPM by categories
+Add in a graphing function which shows overall average GPM from recent games over dates

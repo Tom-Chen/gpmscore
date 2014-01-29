@@ -1,0 +1,54 @@
+﻿extends layout
+block head
+  script(type='text/javascript', src='//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js')
+  link(rel='stylesheet', href='http://code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css')
+  style(type='text/css').
+    table {
+      text-align: center;
+    }
+  script(type='text/javascript').
+    $(document).ready(function() {
+      $("#name").keyup(function(event){
+          if(event.keyCode == 13){
+              $("#sumButton").click();
+          }
+      });
+      $('#sumButton').click(function(){
+        var sumName = $('#name').val();
+        $.post( "getinfo", {name: sumName}, function(res){
+          if(res.error == 'true') {
+            $('#message').empty();
+            $('#indiv').empty();
+            $('#message').text(res.data);
+          }
+          else if(res.error == 'false') {
+            $('#message').empty();
+            $('#indiv').empty();
+            $('#indiv').append('<tr><th>GPM</th><th>Champion</th><th>Category</th></tr>');
+            var recent_games = res.data;
+            var GPM = [];
+            var avgGPM = 0;
+            for(var i = 0; i < recent_games.length; i++){
+              var rawGPM = recent_games[i][0]['value'] / recent_games[i][1]['value'] * 60
+              GPM[i] = rawGPM.toFixed(1);
+              avgGPM = avgGPM + rawGPM;
+              console.log(avgGPM);
+              var elem = '<tr><td>' + GPM[i] + '</td><td>' + recent_games[i][2]['name'] + '</td><td>' + recent_games[i][2]['value'] + '</td></tr>';
+              $('#indiv').append(elem);
+            }
+            avgGPM = avgGPM/recent_games.length;
+            $('#message').append('Your overall GPM for your recent games is: ', avgGPM.toFixed(1));
+          }
+        });
+      });
+    });
+block content
+  h1= title
+  div.ui-widget
+    p
+      label Summoner Name: 
+        input#name
+      button#sumButton(type='submit') Go
+  div
+    p#message
+    table#indiv
