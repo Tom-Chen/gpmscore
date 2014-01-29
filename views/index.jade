@@ -33,7 +33,6 @@ block head
               var rawGPM = recent_games[i][0]['value'] / recent_games[i][1]['value'] * 60
               GPM[i] = rawGPM.toFixed(1);
               avgGPM = avgGPM + rawGPM;
-              console.log(avgGPM);
               var elem = '<tr><td>' + GPM[i] + '</td><td>' + recent_games[i][2]['name'] + '</td><td>' + recent_games[i][2]['value'] + '</td></tr>';
               $('#indiv').append(elem);
             }

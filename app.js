@@ -7,10 +7,18 @@ var express = require('express');
 var summoner = require('./routes/summoner');
 var http = require('http');
 var path = require('path');
+var mongoose = require('mongoose');
+var gpmmodel = require('./models/model');
 
 var app = express();
 
 // all environments
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/gpmscore', function (err, res) {
+  if (err)
+    {console.log ('Error connecting to DB.')}
+  else
+    {console.log ('Successfully connected to DB.')}
+});
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
