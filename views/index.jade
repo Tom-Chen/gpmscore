@@ -15,7 +15,8 @@ block head
       });
       $('#sumButton').click(function(){
         var sumName = $('#name').val();
-        $.post( "getinfo", {name: sumName}, function(res){
+        var region = $('#region').val();
+        $.post( "getinfo", {name: sumName, region: region}, function(res){
           if(res.error == 'true') {
             $('#message').empty();
             $('#indiv').empty();
@@ -47,7 +48,12 @@ block content
   div.ui-widget
     p
       label Summoner Name: 
-        input#name
+        input#name(required)
+      label Region: 
+        select#region(required)
+          option(value='na' selected) North America
+          option(value='euw') Europe West
+          option(value='eune') Europe North/East
       button#sumButton(type='submit') Go
   div
     p#message

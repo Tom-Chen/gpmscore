@@ -16,21 +16,25 @@ exports.champlist = function(req, res) {
 };
 
 exports.getinfo = function(req, res){
-  lol.getSummonerByName(KEY, 'na', req.body.name, function(err, summoner) {
+  lol.getSummonerByName(KEY, req.body.region, req.body.name, function(err, summoner) {
     if(err || !(summoner.name)) {
       res.send({error: 'true', data: 'Error, or no summoner with that name found.'});
     }
     if(summoner.name) {
       var games = [];
-      lol.getRecentGames(KEY, 'na', summoner, function(err, recent_games) {
+      lol.getRecentGames(KEY, req.body.region, summoner, function(err, recent_games) {
         if(err) {
           res.send({error: 'true', data: "Error retrieving games. Please try again later."});
         }
         if(!err) {
           for (var j = 0; j < recent_games.length; j++) {
-            var champCat = champData.filter(function(i){return i.id == recent_games[j].championId});
-            var gpmData = recent_games[j].statistics.filter(function(i){return i.id == 2 || i.id == 40}).concat(champCat);
-            games.push(gpmData);
+            if(recent_games[j].gameMode == 'CLASSIC'
+            && recent_games[j].gameType == 'MATCHED_GAME'
+            && (recent_games[j].subType == 'NORMAL' || recent_games[j].subType =='RANKED_SOLO_5x5' || recent_games[j].subType =='RANKED_PREMADE_5x5')) {
+              var champCat = champData.filter(function(i){return i.id == recent_games[j].championId});
+              var gpmData = recent_games[j].statistics.filter(function(i){return i.id == 2 || i.id == 40}).concat(champCat);
+              games.push(gpmData);
+            }
           }
           res.send({error: 'false', data: games});
         }
